@@ -94,6 +94,8 @@ def get_all_expiries():
 # Option chain endpoint (auto-pick nearest expiry if not provided)
 @app.get("/option-chain/{symbol}")
 def fetch_option_chain(symbol: str, expiry: str = Query(None, description="Expiry like 25-Sep-2025")):
+
+    print("option chain endpoint called : ")
     session = get_nse_session()
     symbol = symbol.upper()
 
@@ -116,6 +118,7 @@ def fetch_option_chain(symbol: str, expiry: str = Query(None, description="Expir
 
     # Try JSON first
     try:
+        
         return resp.json()
     except Exception:
         pass
@@ -129,5 +132,7 @@ def fetch_option_chain(symbol: str, expiry: str = Query(None, description="Expir
         return json.loads(brotli.decompress(resp.content).decode("utf-8"))
 
     return {"error": "Unknown response format", "headers": dict(resp.headers)}
+
+
 
 
